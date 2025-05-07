@@ -24,7 +24,7 @@ namespace BrainstormingFoodTek.Controllers
             _IAuthentication = IAuthentication;
             _tokenProvider = tokenProvider;
         }
-
+        [HttpPost("signin")]
         public async Task<IActionResult> SignIn(SignInRequestDTO input)
         {
             try
@@ -41,7 +41,7 @@ namespace BrainstormingFoodTek.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
+        [HttpPost("signup")]
         public async Task<IActionResult> SignUp(RegistrationRequestDTO input) {
 
             try
@@ -55,7 +55,7 @@ namespace BrainstormingFoodTek.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
+        [HttpPost("ResetPassword")]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequestDTO input)
         {
             try
@@ -66,6 +66,20 @@ namespace BrainstormingFoodTek.Controllers
             catch (Exception ex)
             {
 
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("verification")]
+        public async Task<IActionResult> Verification(VerificationRequestDTO input)
+        {
+            try
+            {
+                var result = await _authenticationService.Verification(input);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
                 return StatusCode(500, ex.Message);
             }
         }

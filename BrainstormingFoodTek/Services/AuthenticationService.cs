@@ -24,22 +24,25 @@ namespace BrainstormingFoodTek.Services
         {
 
             User user = new User();
-            if (!ValidationHelpers.IsValidEmail(input.Email) || !ValidationHelpers.IsValidEmail(input.Password))
+            if (!(ValidationHelpers.IsValidEmail(input.Email) || ValidationHelpers.IsValidatePassword(input.Password)))
             {
                 return $"Not Valid Email or Password";
             }
-            if (!ValidationHelpers.IsValidName(input.firstname) || !ValidationHelpers.IsValidName(input.lastname))
+            if (!(ValidationHelpers.IsValidName(input.firstname) || ValidationHelpers.IsValidName(input.lastname)))
             {
                 return $"Not Valid FirstName or LastName";
             }
-            if (!ValidationHelpers.IsValidatteBirthDate(input.BirthDate))
+            if (!(ValidationHelpers.IsValidatteBirthDate(input.BirthDate)))
             {
                 return $"Not Birthdate";
             }
             user.Email = input.Email;
             user.Password = input.Password;
             user.FirstName = input.firstname;
+            user.PhoneNumber = input.Phonenum;
             user.LastName = input.lastname;
+            user.UserTypeId = 3;
+            user.StatusId =6 ;
             user.CreatedBy = "System";
             user.CreationDate = DateTime.Now;
 
