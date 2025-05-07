@@ -6,7 +6,7 @@ using System;
 using BrainstormingFoodTek.Interfaces;
 using BrainstormingFoodTek.Models;
 
-namespace FoodtekAPI.Helpers.JWT
+namespace BrainstormingFoodTek.Helpers.JWT
 
 {
     public class TokenProviderHelper: ITokenProvider
@@ -19,7 +19,7 @@ namespace FoodtekAPI.Helpers.JWT
         }
         public string CreateToken(User user)
         {
-            string secretKey = _configuration["Jwt:Secret"]!;
+            string secretKey = _configuration["JWT:Key"]!;
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
 
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -32,10 +32,11 @@ namespace FoodtekAPI.Helpers.JWT
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim("email_verified", user.Email.ToString())
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("Jwt:ExpirationInMinutes")),
+                Expires = DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("JWT:ExpirationInMinutes")),
                 SigningCredentials = credentials,
-                Issuer = _configuration["Jwt:Issuer"],
-                Audience = _configuration["Jwt:Audience"]
+                Issuer = _configuration["JWT:IssuerIP"],
+                Audience = _configuration["JWT:AudienceIP"]
+
             };
 
             var handler = new JsonWebTokenHandler();

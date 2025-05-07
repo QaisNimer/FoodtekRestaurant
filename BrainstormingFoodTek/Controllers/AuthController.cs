@@ -1,12 +1,11 @@
 ﻿using BrainstormingFoodTek.DTOs.Registration.Request;
 using BrainstormingFoodTek.Interfaces;
 using BrainstormingFoodTek.Services;
-using FoodtekAPI.DTOs.SignIns.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 
-namespace FoodtekAPI.Controllers
+namespace BrainstormingFoodTek.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -15,12 +14,15 @@ namespace FoodtekAPI.Controllers
         private readonly ItemsService _itemService;
         private readonly  AuthenticationService _authenticationService;
         private readonly IAuthentication _IAuthentication;
+        private readonly ITokenProvider _tokenProvider;
 
-        public AuthController(ItemsService itemService,AuthenticationService authenticationService, IAuthentication IAuthentication)
+        public AuthController(ItemsService itemService,AuthenticationService authenticationService,
+            IAuthentication IAuthentication, ITokenProvider tokenProvider)
         {
             _itemService = itemService;
             _authenticationService = authenticationService;
             _IAuthentication = IAuthentication;
+            _tokenProvider = tokenProvider;
         }
 
         public async Task<IActionResult> SignIn(SignInRequestDTO input)

@@ -5,7 +5,7 @@ using System.Text;
 using System;
 using BrainstormingFoodTek.Models;
 
-namespace FoodtekAPI.Helpers.JWT
+namespace BrainstormingFoodTek.Helpers.JWT
 {
     public class GenerateJwtTokenHelper
     {

@@ -1,4 +1,4 @@
-﻿namespace FoodtekAPI.DTOs.SignIn.Request
+﻿namespace BrainstormingFoodTek.DTOs.Registration.Request
 {
     public class VerificationRequestDTO
     {
