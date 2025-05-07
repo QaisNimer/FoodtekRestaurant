@@ -19,7 +19,7 @@ namespace BrainstormingFoodTek.Helpers.JWT
         }
         public string CreateToken(User user)
         {
-            string secretKey = _configuration["JWT:Key"]!;
+            string secretKey = _configuration["JWT:Secret"]!;
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
 
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -34,8 +34,8 @@ namespace BrainstormingFoodTek.Helpers.JWT
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("JWT:ExpirationInMinutes")),
                 SigningCredentials = credentials,
-                Issuer = _configuration["JWT:IssuerIP"],
-                Audience = _configuration["JWT:AudienceIP"]
+                Issuer = _configuration["JWT:Issuer"],
+                Audience = _configuration["JWT:Audience"]
 
             };
 

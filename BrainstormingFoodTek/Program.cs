@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using BrainstormingFoodTek.Helpers.OTPUserSelection;
 using BrainstormingFoodTek.Helpers.SendingEmail;
+using BrainstormingFoodTek.Helpers.ValidationFields;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<FoodtekDbContext>(option => option.UseSqlServer("Data Source=DESKTOP-QS28KQP\\SQLEXPRESS;Initial Catalog=RestaurantDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"));
+//builder.Services.AddDbContext<FoodtekDbContext>(option => option.UseSqlServer("BrainstormingFoodtekDatabase"));
 builder.Services.AddScoped<IItems, ItemsService>();
 builder.Services.AddScoped<ICategory, CategoryService>();
 builder.Services.AddScoped<IDiscount, DiscountService>();
@@ -27,7 +29,9 @@ builder.Services.AddScoped<INotification, NotificationServices>();
 builder.Services.AddScoped<ICart, CartService>();
 builder.Services.AddScoped<IFavorite, FavoriteService>();
 builder.Services.AddScoped<IAuthentication, AuthenticationService>();
-//builder.Services.AddSingleton<TokenProviderHelper>();
+builder.Services.AddSingleton<TokenProviderHelper>();
+builder.Services.AddScoped<ItemsService>();
+builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<ITokenProvider, TokenProviderHelper>();
 builder.Services.AddScoped<ItemsValidation>();
 builder.Services.AddScoped<GenerateJwtTokenHelper>();
@@ -35,10 +39,11 @@ builder.Services.AddScoped<ValidateUserExist>();
 builder.Services.AddScoped<OTPBasedOnUserRole>();
 builder.Services.AddScoped<MailingHelper>();
 // Add Authentication and Authorization with JWT
+builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.RequireHttpsMetadata = false; // for development
+        options.RequireHttpsMetadata = true; // for development
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -61,7 +66,11 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "BrainstormingFoodTek API V1");
+    }  // Set Swagger endpoint
+    );
 }
 
 app.UseHttpsRedirection();
