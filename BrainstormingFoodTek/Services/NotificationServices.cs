@@ -10,10 +10,12 @@ namespace BrainstormingFoodTek.Services
     {
         private readonly FoodtekDbContext _foodtekDbContext;
         private readonly ValidateUserExist _validateUserExist;
+       
         public NotificationServices(FoodtekDbContext foodtekDbContext, ValidateUserExist validateUserExist)
         {
             _foodtekDbContext = foodtekDbContext;
-            _validateUserExist = validateUserExist; 
+            _validateUserExist = validateUserExist;
+            
         }
         public async Task<List<NotificationResponseDTO>> GetNotificationsByUserId(int userId)
         {

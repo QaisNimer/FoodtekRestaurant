@@ -1,4 +1,5 @@
-﻿using BrainstormingFoodTek.Services;
+﻿using BrainstormingFoodTek.Interfaces;
+using BrainstormingFoodTek.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,11 +9,13 @@ namespace BrainstormingFoodTek.Controllers
     [ApiController]
     public class NotificationController : ControllerBase
     {
-        private readonly NotificationServices _getNotificationsByUserId;
-        public NotificationController(NotificationServices notificationServices)
+        private readonly INotification _getNotificationsByUserId;
+
+        public NotificationController(INotification notificationServices)
         {
             _getNotificationsByUserId = notificationServices;
         }
+
 
         [HttpGet("notifications")]
         public async Task<IActionResult> GetUserNotifications(int userId)

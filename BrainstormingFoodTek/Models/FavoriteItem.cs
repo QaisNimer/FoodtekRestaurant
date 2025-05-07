@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BrainstormingFoodTek.Models;
-
+[Table("favoriteitems", Schema = "dbo")]
 public partial class FavoriteItem
 {
     public int ClientId { get; set; }

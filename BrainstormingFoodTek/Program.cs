@@ -20,7 +20,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<FoodtekDbContext>(option => option.UseSqlServer("Data Source=DESKTOP-QS28KQP\\SQLEXPRESS;Initial Catalog=RestaurantDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"));
+builder.Services.AddDbContext<FoodtekDbContext>(option => option.UseSqlServer("Data Source=DESKTOP-480GQEA\\SQLEXPRESS01;Initial Catalog=RestaurntDb_bacpac;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"));
 //builder.Services.AddDbContext<FoodtekDbContext>(option => option.UseSqlServer("BrainstormingFoodtekDatabase"));
 builder.Services.AddScoped<IItems, ItemsService>();
 builder.Services.AddScoped<ICategory, CategoryService>();
@@ -38,6 +38,8 @@ builder.Services.AddScoped<GenerateJwtTokenHelper>();
 builder.Services.AddScoped<ValidateUserExist>();
 builder.Services.AddScoped<OTPBasedOnUserRole>();
 builder.Services.AddScoped<MailingHelper>();
+builder.Services.AddScoped<INotification, NotificationServices>();
+builder.Services.AddScoped<ValidateUserExist>();
 // Add Authentication and Authorization with JWT
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
