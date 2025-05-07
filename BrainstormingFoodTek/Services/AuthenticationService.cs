@@ -1,10 +1,8 @@
 ﻿using BrainstormingFoodTek.DTOs.Registration.Request;
+using BrainstormingFoodTek.Helpers.OTPUserSelection;
+using BrainstormingFoodTek.Helpers.ValidationFields;
 using BrainstormingFoodTek.Interfaces;
 using BrainstormingFoodTek.Models;
-using FoodtekAPI.DTOs.SignIn.Request;
-using FoodtekAPI.DTOs.SignIns.Request;
-using FoodtekAPI.Helpers.OTPUserSelection;
-using FoodtekAPI.Helpers.ValidationFields;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

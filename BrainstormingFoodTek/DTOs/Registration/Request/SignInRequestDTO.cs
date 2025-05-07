@@ -1,9 +1,8 @@
-﻿namespace FoodtekAPI.DTOs.SignIns.Request
+﻿namespace BrainstormingFoodTek.DTOs.Registration.Request;
+
+public class SignInRequestDTO
 {
-    public class SignInRequestDTO
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-       
-    }
+    public string Email { get; set; }
+    public string Password { get; set; }
+   
 }

@@ -4,12 +4,12 @@ using BrainstormingFoodTek.Models;
 using BrainstormingFoodTek.Services;
 using Microsoft.EntityFrameworkCore;
 using BrainstormingFoodTek.Helpers.UserValidation;
-using FoodtekAPI.Helpers.JWT;
+using BrainstormingFoodTek.Helpers.JWT;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using FoodtekAPI.Helpers.OTPUserSelection;
-using FoodtekAPI.Helpers.SendingEmail;
+using BrainstormingFoodTek.Helpers.OTPUserSelection;
+using BrainstormingFoodTek.Helpers.SendingEmail;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +27,8 @@ builder.Services.AddScoped<INotification, NotificationServices>();
 builder.Services.AddScoped<ICart, CartService>();
 builder.Services.AddScoped<IFavorite, FavoriteService>();
 builder.Services.AddScoped<IAuthentication, AuthenticationService>();
-builder.Services.AddSingleton<TokenProviderHelper>();
+//builder.Services.AddSingleton<TokenProviderHelper>();
+builder.Services.AddScoped<ITokenProvider, TokenProviderHelper>();
 builder.Services.AddScoped<ItemsValidation>();
 builder.Services.AddScoped<GenerateJwtTokenHelper>();
 builder.Services.AddScoped<ValidateUserExist>();
@@ -52,12 +53,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 var app = builder.Build();
 //Token Also
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }

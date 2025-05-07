@@ -1,7 +1,7 @@
 ﻿using SendGrid.Helpers.Mail;
 using SendGrid;
 
-namespace FoodtekAPI.Helpers.SendingEmail
+namespace BrainstormingFoodTek.Helpers.SendingEmail
 {
     public class MailingHelper
     {

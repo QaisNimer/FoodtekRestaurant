@@ -1,7 +1,7 @@
 ﻿using BrainstormingFoodTek.Models;
-using FoodtekAPI.Helpers.SendingEmail;
+using BrainstormingFoodTek.Helpers.SendingEmail;
 
-namespace FoodtekAPI.Helpers.OTPUserSelection
+namespace BrainstormingFoodTek.Helpers.OTPUserSelection
 {
     public class OTPBasedOnUserRole
     {

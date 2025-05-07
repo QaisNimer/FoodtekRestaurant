@@ -1,6 +1,4 @@
 ﻿using BrainstormingFoodTek.DTOs.Registration.Request;
-using FoodtekAPI.DTOs.SignIn.Request;
-using FoodtekAPI.DTOs.SignIns.Request;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BrainstormingFoodTek.Interfaces
