@@ -15,13 +15,16 @@ using BrainstormingFoodTek.Helpers.ValidationFields;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<RestaurantDbContext>(option => option.UseSqlServer("Data Source=DESKTOP-QS28KQP\\SQLEXPRESS;Initial Catalog=RestaurantDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"));
-//builder.Services.AddDbContext<RestaurantDbContext>(option => option.UseSqlServer("BrainstormingFoodtekDatabase"));
+
+//DbContext For Local.
+//builder.Services.AddDbContext<RestaurantDbContext>(option => option.UseSqlServer("Data Source=DESKTOP-QS28KQP\\SQLEXPRESS;Initial Catalog=RestaurantDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"));
+//Db Context For Server
+builder.Services.AddDbContext<RestaurantDbContext>(option => option.UseSqlServer("Data Source=DESKTOP-QS28KQP\\SQLEXPRESS;Initial Catalog=RestaurantDB;User Id=admin;Password=Test@1234;Trust Server Certificate=True"));
+
 builder.Services.AddScoped<IItems, ItemsService>();
 builder.Services.AddScoped<ICategory, CategoryService>();
 builder.Services.AddScoped<IDiscount, DiscountService>();
@@ -62,17 +65,27 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
+// When You Want To Test Locally Comment This, If Publish Keep It
+app.UseSwagger();
+app.UseSwaggerUI(
+    c => {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "BrainstormingFoodTek API V1");
-    }  // Set Swagger endpoint
+        c.RoutePrefix = string.Empty;
+    }
     );
-}
+// Until Here To Test Locally
+
+// Configure the HTTP request pipeline.
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseDeveloperExceptionPage();
+//    app.UseSwagger();
+//    app.UseSwaggerUI(c =>
+//    {
+//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "BrainstormingFoodTek API V1");
+//    }  // Set Swagger endpoint
+//    );
+//}
 
 app.UseHttpsRedirection();
 
