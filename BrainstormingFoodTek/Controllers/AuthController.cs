@@ -1,12 +1,11 @@
 ﻿using BrainstormingFoodTek.DTOs.Registration.Request;
 using BrainstormingFoodTek.Interfaces;
 using BrainstormingFoodTek.Services;
-using FoodtekAPI.DTOs.SignIns.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 
-namespace FoodtekAPI.Controllers
+namespace BrainstormingFoodTek.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -15,14 +14,17 @@ namespace FoodtekAPI.Controllers
         private readonly ItemsService _itemService;
         private readonly  AuthenticationService _authenticationService;
         private readonly IAuthentication _IAuthentication;
+        private readonly ITokenProvider _tokenProvider;
 
-        public AuthController(ItemsService itemService,AuthenticationService authenticationService, IAuthentication IAuthentication)
+        public AuthController(ItemsService itemService,AuthenticationService authenticationService,
+            IAuthentication IAuthentication, ITokenProvider tokenProvider)
         {
             _itemService = itemService;
             _authenticationService = authenticationService;
             _IAuthentication = IAuthentication;
+            _tokenProvider = tokenProvider;
         }
-
+        [HttpPost("signin")]
         public async Task<IActionResult> SignIn(SignInRequestDTO input)
         {
             try
@@ -39,7 +41,7 @@ namespace FoodtekAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
+        [HttpPost("signup")]
         public async Task<IActionResult> SignUp(RegistrationRequestDTO input) {
 
             try
@@ -53,7 +55,7 @@ namespace FoodtekAPI.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
+        [HttpPost("ResetPassword")]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequestDTO input)
         {
             try
@@ -64,6 +66,20 @@ namespace FoodtekAPI.Controllers
             catch (Exception ex)
             {
 
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("verification")]
+        public async Task<IActionResult> Verification(VerificationRequestDTO input)
+        {
+            try
+            {
+                var result = await _authenticationService.Verification(input);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
                 return StatusCode(500, ex.Message);
             }
         }
