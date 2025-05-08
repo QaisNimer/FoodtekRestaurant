@@ -20,7 +20,6 @@ namespace BrainstormingFoodTek.Services
             _Context.FavoriteItems.Add(favoriteItem);
             _Context.SaveChanges();
             return "Add Successfully";
-            //
         }
 
         public async Task<string> RemoveFromFavorite(int itemId)
