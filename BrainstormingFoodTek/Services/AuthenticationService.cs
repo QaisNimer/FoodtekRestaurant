@@ -24,7 +24,6 @@ namespace BrainstormingFoodTek.Services
         }
         public async Task<string> SignUp(RegistrationRequestDTO input)
         {
-
             User user = new User();
             if (!ValidationHelpers.IsValidEmail(input.Email) || !ValidationHelpers.IsValidEmail(input.Password))
             {
