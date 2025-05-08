@@ -1,4 +1,6 @@
-﻿using BrainstormingFoodTek.Services;
+﻿using BrainstormingFoodTek.Helpers.UserValidation;
+using BrainstormingFoodTek.Models;
+using BrainstormingFoodTek.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +11,14 @@ namespace BrainstormingFoodTek.Controllers
     public class NotificationController : ControllerBase
     {
         private readonly NotificationServices _getNotificationsByUserId;
-        public NotificationController(NotificationServices notificationServices)
+        private readonly RestaurantDbContext _foodtekDbContext;
+        private readonly ValidateUserExist _validateUserExist;
+        public NotificationController(NotificationServices notificationServices, RestaurantDbContext restaurantDbContext, 
+            ValidateUserExist validateUserExist)
         {
             _getNotificationsByUserId = notificationServices;
+            _foodtekDbContext = restaurantDbContext;
+            _validateUserExist = validateUserExist;
         }
 
         [HttpGet("notifications")]

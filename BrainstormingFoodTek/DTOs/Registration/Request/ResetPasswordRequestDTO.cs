@@ -1,4 +1,4 @@
-﻿namespace FoodtekAPI.DTOs.SignIns.Request
+﻿namespace BrainstormingFoodTek.DTOs.Registration.Request
 {
     public class ResetPasswordRequestDTO
     {

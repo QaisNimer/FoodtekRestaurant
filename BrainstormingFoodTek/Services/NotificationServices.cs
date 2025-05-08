@@ -8,9 +8,9 @@ namespace BrainstormingFoodTek.Services
 {
     public class NotificationServices: INotification
     {
-        private readonly FoodtekDbContext _foodtekDbContext;
+        private readonly RestaurantDbContext _foodtekDbContext;
         private readonly ValidateUserExist _validateUserExist;
-        public NotificationServices(FoodtekDbContext foodtekDbContext, ValidateUserExist validateUserExist)
+        public NotificationServices(RestaurantDbContext foodtekDbContext, ValidateUserExist validateUserExist)
         {
             _foodtekDbContext = foodtekDbContext;
             _validateUserExist = validateUserExist; 

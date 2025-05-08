@@ -6,9 +6,9 @@ namespace BrainstormingFoodTek.Services
 {
     public class CategoryService: ICategory
     {
-        private readonly FoodtekDbContext _Context;
+        private readonly RestaurantDbContext _Context;
 
-        public CategoryService(FoodtekDbContext context)
+        public CategoryService(RestaurantDbContext context)
         {
             _Context = context;
         }

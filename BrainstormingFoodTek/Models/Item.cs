@@ -37,7 +37,5 @@ public partial class Item
 
     public virtual Category Category { get; set; } = null!;
 
-    public virtual ICollection<FavoriteItem> FavoriteItems { get; set; } = new List<FavoriteItem>();
-
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 }

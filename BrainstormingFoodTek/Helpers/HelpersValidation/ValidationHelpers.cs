@@ -1,4 +1,4 @@
-﻿namespace FoodtekAPI.Helpers.ValidationFields
+﻿namespace BrainstormingFoodTek.Helpers.ValidationFields
 {
     public static class ValidationHelpers
     {

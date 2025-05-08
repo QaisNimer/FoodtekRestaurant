@@ -1,10 +1,8 @@
 ﻿using BrainstormingFoodTek.DTOs.Registration.Request;
+using BrainstormingFoodTek.Helpers.OTPUserSelection;
+using BrainstormingFoodTek.Helpers.ValidationFields;
 using BrainstormingFoodTek.Interfaces;
 using BrainstormingFoodTek.Models;
-using FoodtekAPI.DTOs.SignIn.Request;
-using FoodtekAPI.DTOs.SignIns.Request;
-using FoodtekAPI.Helpers.OTPUserSelection;
-using FoodtekAPI.Helpers.ValidationFields;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,10 +10,10 @@ namespace BrainstormingFoodTek.Services
 {
     public class AuthenticationService : IAuthentication
     {
-        private readonly FoodtekDbContext _foodtekDbContext;
+        private readonly RestaurantDbContext _foodtekDbContext;
         private readonly OTPBasedOnUserRole _otpBasedOnUserRole;
         private readonly ITokenProvider _tokenProvider;
-        public AuthenticationService(FoodtekDbContext foodtekDbContext, OTPBasedOnUserRole otpBasedOnUserRole
+        public AuthenticationService(RestaurantDbContext foodtekDbContext, OTPBasedOnUserRole otpBasedOnUserRole
             , ITokenProvider tokenProvider)
         {
             _foodtekDbContext = foodtekDbContext;
@@ -26,34 +24,40 @@ namespace BrainstormingFoodTek.Services
         {
 
             User user = new User();
-            if (!ValidationHelpers.IsValidEmail(input.Email) || !ValidationHelpers.IsValidEmail(input.Password))
+            if (!(ValidationHelpers.IsValidEmail(input.Email) || ValidationHelpers.IsValidatePassword(input.Password)))
             {
                 return $"Not Valid Email or Password";
             }
-            if (!ValidationHelpers.IsValidName(input.firstname) || !ValidationHelpers.IsValidName(input.lastname))
+            if (!(ValidationHelpers.IsValidName(input.firstname) || ValidationHelpers.IsValidName(input.lastname)))
             {
                 return $"Not Valid FirstName or LastName";
             }
-            if (!ValidationHelpers.IsValidatteBirthDate(input.BirthDate))
+            if (!(ValidationHelpers.IsValidatteBirthDate(input.BirthDate)))
             {
                 return $"Not Birthdate";
             }
             user.Email = input.Email;
             user.Password = input.Password;
             user.FirstName = input.firstname;
+            user.PhoneNumber = input.Phonenum;
             user.LastName = input.lastname;
+            user.UserTypeId = 3;
+            user.StatusId =6 ;
             user.CreatedBy = "System";
             user.CreationDate = DateTime.Now;
 
-            Random random = new Random();
-            var otp = random.Next(1111, 9999);
-            user.Otp = otp.ToString();
+            //Random random = new Random();
+            //var otp = random.Next(1111, 9999);
+            //user.Otp = otp.ToString();
 
-            user.ExpireOtp = DateTime.Now.AddMinutes(10);
+            //user.ExpireOtp = DateTime.Now.AddMinutes(10);
             _foodtekDbContext.Users.Add(user);
             _foodtekDbContext.SaveChanges();
-            // send otp code via email
-            _otpBasedOnUserRole.OTPBasedOnUserType(user.Email, "OTP for Sign Up.", "Completed Log Up.");
+            if (user.UserId>0)
+            {
+                _foodtekDbContext.Update(await _otpBasedOnUserRole.OTPBasedOnUserType(user.Email, "OTP for Sign Up.", "Completed Log Up.", user));
+                _foodtekDbContext.SaveChanges();
+            }
             return "Verifying Your email using otp";
         }
         public async Task<string> SignIn(SignInRequestDTO input)
@@ -71,7 +75,8 @@ namespace BrainstormingFoodTek.Services
                     return $"Not Valid Email or Password";
                 }
 
-                _otpBasedOnUserRole.OTPBasedOnUserType(user.Email, "OTP for Sign In.", "Completed Log In.");
+                _foodtekDbContext.Update(await _otpBasedOnUserRole.OTPBasedOnUserType(user.Email, "OTP for Sign In.", "Completed Log In.", user));
+                _foodtekDbContext.SaveChanges();
                 return "Check your email OTP has been sent!";
 
             }
