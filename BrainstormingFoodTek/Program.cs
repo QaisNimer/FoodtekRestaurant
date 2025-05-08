@@ -15,13 +15,16 @@ using BrainstormingFoodTek.Helpers.ValidationFields;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//DbContext For Local.
 //builder.Services.AddDbContext<RestaurantDbContext>(option => option.UseSqlServer("Data Source=DESKTOP-QS28KQP\\SQLEXPRESS;Initial Catalog=RestaurantDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"));
+//Db Context For Server
 builder.Services.AddDbContext<RestaurantDbContext>(option => option.UseSqlServer("Data Source=DESKTOP-QS28KQP\\SQLEXPRESS;Initial Catalog=RestaurantDB;User Id=admin;Password=Test@1234;Trust Server Certificate=True"));
+
 builder.Services.AddScoped<IItems, ItemsService>();
 builder.Services.AddScoped<ICategory, CategoryService>();
 builder.Services.AddScoped<IDiscount, DiscountService>();
