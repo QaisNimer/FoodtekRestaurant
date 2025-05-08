@@ -4,8 +4,8 @@ namespace BrainstormingFoodTek.Helpers.ItemsValidation
 {
     public class ItemsValidation
     {
-        private readonly FoodtekDbContext _foodtekDbContext;
-        public ItemsValidation(FoodtekDbContext foodtekDbContext)
+        private readonly RestaurantDbContext _foodtekDbContext;
+        public ItemsValidation(RestaurantDbContext foodtekDbContext)
         {
             _foodtekDbContext = foodtekDbContext;
         }

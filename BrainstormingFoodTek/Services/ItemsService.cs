@@ -10,10 +10,10 @@ namespace BrainstormingFoodTek.Services
 {
     public class ItemsService:IItems
     {
-        private readonly FoodtekDbContext _foodtekDbContext;
+        private readonly RestaurantDbContext _foodtekDbContext;
         private readonly ItemsValidation _itemsValidation;
         private readonly ValidateUserExist _userValidation;
-        public ItemsService(FoodtekDbContext foodtekDbContext, ItemsValidation itemsValidation,
+        public ItemsService(RestaurantDbContext foodtekDbContext, ItemsValidation itemsValidation,
             ValidateUserExist validateUserExist)
         {
             _foodtekDbContext = foodtekDbContext;
@@ -136,21 +136,23 @@ namespace BrainstormingFoodTek.Services
                 {
                     throw new Exception();
                 }
-            var favorites = await _foodtekDbContext.UserFavoriteItems
-            .Where(fav => fav.ClientId == UserId)
-            .Select(fav => new FavoriteItemDTO
-            {
-                Id = fav.ItemId,
-                EnglishName = fav.EnglishName,
-                ArabicName = fav.ArabicName,
-                EnglishDescription = fav.EnglishDescription,
-                ArabicDescription = fav.ArabicDescription,
-                Price = fav.Price,
-                CreationDate = fav.CreationDate
-            })
-            .ToListAsync();
+                var query = await (from fav in _foodtekDbContext.FavoriteItems
+                                   join
+                                   i in _foodtekDbContext.Items
+                                   on fav.ItemId equals i.ItemId
+                                   where (fav.ClientId == UserId)
+                                   select new FavoriteItemDTO
+                                   {
+                                       Id = fav.ItemId,
+                                       EnglishName = i.EnglishName,
+                                       ArabicName = i.ArabicName,
+                                       EnglishDescription = i.DescriptionEn,
+                                       ArabicDescription = i.DescriptionAr,
+                                       Price = i.Price,
+                                       CreationDate = fav.CreationDate
+                                   }).ToListAsync();
 
-                return favorites;
+                return query;
             }
             catch (Exception ex)
             {

@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 public class CartService : ICart
 {
-    private readonly FoodtekDbContext _DbContext;
-    public CartService(FoodtekDbContext DbContext)
+    private readonly RestaurantDbContext _DbContext;
+    public CartService(RestaurantDbContext DbContext)
     {
         _DbContext = DbContext;
     }

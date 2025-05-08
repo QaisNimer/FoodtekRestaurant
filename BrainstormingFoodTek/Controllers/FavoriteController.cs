@@ -8,10 +8,10 @@ namespace BrainstormingFoodTek.Controllers
 {
     public class FavoriteController : ControllerBase
     {
-        private readonly FoodtekDbContext _context;
+        private readonly RestaurantDbContext _context;
         private readonly IFavorite _favoriteService;
 
-        public FavoriteController(FoodtekDbContext context, IFavorite favoriteService)
+        public FavoriteController(RestaurantDbContext context, IFavorite favoriteService)
         {
             _context = context;
             _favoriteService = favoriteService;
@@ -25,13 +25,11 @@ namespace BrainstormingFoodTek.Controllers
 
                 if (favoriteDTO.ClientId <= 0 || favoriteDTO.ItemsID <= 0)
                     return BadRequest("ClientId and ItemId must be greater than zero.");
-
                 var clientExists = await _context.Clients.AnyAsync(c => c.ClientId == favoriteDTO.ClientId);
                 var itemExists = await _context.Items.AnyAsync(i => i.ItemId == favoriteDTO.ItemsID);
 
                 if (!clientExists || !itemExists)
                     return NotFound("Client or Item not found in the database.");
-
                 var result = await _favoriteService.AddToFavorite(favoriteDTO);
                 return Ok(result);
             }

@@ -5,60 +5,37 @@ namespace BrainstormingFoodTek.Helpers.OTPUserSelection
 {
     public class OTPBasedOnUserRole
     {
-        private readonly FoodtekDbContext _foodtekDbContext;
         private readonly MailingHelper _mailingHelper;
-        public OTPBasedOnUserRole(FoodtekDbContext foodtekDbContext, MailingHelper mailingHelper)
+        public OTPBasedOnUserRole(MailingHelper mailingHelper)
         {
-            _foodtekDbContext = foodtekDbContext;
             _mailingHelper = mailingHelper;
         }
-        public async void OTPBasedOnUserType(string Email,string title, string message) {
-            var user =  _foodtekDbContext.Users.Where(x=>x.Email== Email).FirstOrDefault();
-            var otp=100;
+        public async Task<User> OTPBasedOnUserType(string Email,string title, string message, User us) {
+            var otp=111111;
+            var expireDate=DateTime.Now;
             Random rand = new Random();
-            switch (user.UserId)
+            switch (us.UserTypeId)
             {
                 case 1:
-                    otp = rand.Next(11111, 99999);
-                    user.ExpireOtp = DateTime.Now.AddMinutes(10);
-                    //Send code via email
-                    _mailingHelper.SendEmail(user.Email,user.Otp, title,message);
-                    _foodtekDbContext.Update(user);
-                    _foodtekDbContext.SaveChanges();
-                    break;
-
                 case 2:
-                     otp = rand.Next(11111, 99999);
-                    user.ExpireOtp = DateTime.Now.AddMinutes(10);
-                    //Send code via email
-                    _mailingHelper.SendEmail(user.Email, user.Otp, title, message);
-                    _foodtekDbContext.Update(user);
-                    _foodtekDbContext.SaveChanges();
-
+                    otp = rand.Next(11111, 99999);
+                    expireDate = DateTime.Now.AddMinutes(10);
                     break;
+
                 case 3:
-                     otp = rand.Next(11111, 99999);
-                    user.ExpireOtp = DateTime.Now.AddMinutes(60);
-                    //Send code via email
-                    _mailingHelper.SendEmail(user.Email, user.Otp, title, message);
-                    _foodtekDbContext.Update(user);
-                    _foodtekDbContext.SaveChanges();
-
-                    break;
                 case 5:
-
                      otp = rand.Next(11111, 99999);
-                    user.ExpireOtp = DateTime.Now.AddMinutes(60);
-                    //Send code via email
-                    _mailingHelper.SendEmail(user.Email, user.Otp, title, message);
-                    _foodtekDbContext.Update(user);
-                    _foodtekDbContext.SaveChanges();
-
+                    expireDate = DateTime.Now.AddMinutes(60);
                     break;
+                
                 default:
                     Console.WriteLine("This Role Doesn't Have OTP");
                     break;           
             }
+            us.Otp = otp.ToString();
+            us.ExpireOtp = expireDate;
+            await _mailingHelper.SendEmail(us.Email, us.Otp, title, message);
+            return us;
 
         }
     }

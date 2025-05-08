@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BrainstormingFoodTek.Models;
 
-public partial class FoodtekDbContext : DbContext
+public partial class RestaurantDbContext : DbContext
 {
-    public FoodtekDbContext()
+    public RestaurantDbContext()
     {
     }
 
-    public FoodtekDbContext(DbContextOptions<FoodtekDbContext> options)
+    public RestaurantDbContext(DbContextOptions<RestaurantDbContext> options)
         : base(options)
     {
     }
@@ -56,8 +56,6 @@ public partial class FoodtekDbContext : DbContext
     public virtual DbSet<ReportedIssue> ReportedIssues { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
-
-    public DbSet<FavoriteItem> UserFavoriteItems { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -283,7 +281,7 @@ public partial class FoodtekDbContext : DbContext
 
         modelBuilder.Entity<FavoriteItem>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK_FavoriteItems_Id");
+            entity.HasKey(e => e.Id).HasName("PK__Favorite__3214EC07863403A8");
 
             entity.Property(e => e.ClientId).HasColumnName("ClientID");
             entity.Property(e => e.CreatedBy).HasDefaultValue("System");
@@ -293,16 +291,6 @@ public partial class FoodtekDbContext : DbContext
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.ItemId).HasColumnName("ItemID");
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Client).WithMany(p => p.FavoriteItems)
-                .HasForeignKey(d => d.ClientId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_FavoriteItems_ClientID");
-
-            entity.HasOne(d => d.Item).WithMany(p => p.FavoriteItems)
-                .HasForeignKey(d => d.ItemId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_FavoriteItems_ItemID");
         });
 
         modelBuilder.Entity<Item>(entity =>

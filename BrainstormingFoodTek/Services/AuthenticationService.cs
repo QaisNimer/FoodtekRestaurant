@@ -10,10 +10,10 @@ namespace BrainstormingFoodTek.Services
 {
     public class AuthenticationService : IAuthentication
     {
-        private readonly FoodtekDbContext _foodtekDbContext;
+        private readonly RestaurantDbContext _foodtekDbContext;
         private readonly OTPBasedOnUserRole _otpBasedOnUserRole;
         private readonly ITokenProvider _tokenProvider;
-        public AuthenticationService(FoodtekDbContext foodtekDbContext, OTPBasedOnUserRole otpBasedOnUserRole
+        public AuthenticationService(RestaurantDbContext foodtekDbContext, OTPBasedOnUserRole otpBasedOnUserRole
             , ITokenProvider tokenProvider)
         {
             _foodtekDbContext = foodtekDbContext;
@@ -45,15 +45,18 @@ namespace BrainstormingFoodTek.Services
             user.CreatedBy = "System";
             user.CreationDate = DateTime.Now;
 
-            Random random = new Random();
-            var otp = random.Next(1111, 9999);
-            user.Otp = otp.ToString();
+            //Random random = new Random();
+            //var otp = random.Next(1111, 9999);
+            //user.Otp = otp.ToString();
 
-            user.ExpireOtp = DateTime.Now.AddMinutes(10);
+            //user.ExpireOtp = DateTime.Now.AddMinutes(10);
             _foodtekDbContext.Users.Add(user);
             _foodtekDbContext.SaveChanges();
-            // send otp code via email
-            _otpBasedOnUserRole.OTPBasedOnUserType(user.Email, "OTP for Sign Up.", "Completed Log Up.");
+            if (user.UserId>0)
+            {
+                _foodtekDbContext.Update(await _otpBasedOnUserRole.OTPBasedOnUserType(user.Email, "OTP for Sign Up.", "Completed Log Up.", user));
+                _foodtekDbContext.SaveChanges();
+            }
             return "Verifying Your email using otp";
         }
         public async Task<string> SignIn(SignInRequestDTO input)
@@ -71,7 +74,8 @@ namespace BrainstormingFoodTek.Services
                     return $"Not Valid Email or Password";
                 }
 
-                _otpBasedOnUserRole.OTPBasedOnUserType(user.Email, "OTP for Sign In.", "Completed Log In.");
+                _foodtekDbContext.Update(await _otpBasedOnUserRole.OTPBasedOnUserType(user.Email, "OTP for Sign In.", "Completed Log In.", user));
+                _foodtekDbContext.SaveChanges();
                 return "Check your email OTP has been sent!";
 
             }

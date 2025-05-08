@@ -4,8 +4,8 @@ namespace BrainstormingFoodTek.Helpers.UserValidation
 {
     public class ValidateUserExist
     {
-        private readonly FoodtekDbContext _foodtekDbContext;
-        public ValidateUserExist(FoodtekDbContext foodtekDbContext)
+        private readonly RestaurantDbContext _foodtekDbContext;
+        public ValidateUserExist(RestaurantDbContext foodtekDbContext)
         {
             _foodtekDbContext = foodtekDbContext;
         }

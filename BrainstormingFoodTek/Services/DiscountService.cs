@@ -6,9 +6,9 @@ namespace BrainstormingFoodTek.Services
 {
     public class DiscountService : IDiscount
     {
-        private readonly FoodtekDbContext _Context;
+        private readonly RestaurantDbContext _Context;
 
-        public DiscountService(FoodtekDbContext context)
+        public DiscountService(RestaurantDbContext context)
         {
             _Context = context;
         }
