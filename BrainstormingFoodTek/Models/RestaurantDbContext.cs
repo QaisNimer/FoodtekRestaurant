@@ -571,6 +571,7 @@ public partial class RestaurantDbContext : DbContext
                 .HasColumnName("ExpireOTP");
             entity.Property(e => e.FirstName).HasMaxLength(100);
             entity.Property(e => e.IsActive).HasDefaultValue(true);
+            entity.Property(e => e.IsLoggedIn).HasDefaultValue(false);
             entity.Property(e => e.LastLoggedIn).HasColumnType("datetime");
             entity.Property(e => e.LastName).HasMaxLength(100);
             entity.Property(e => e.Otp)
