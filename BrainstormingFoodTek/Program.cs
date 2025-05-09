@@ -21,9 +21,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //DbContext For Local.
-//builder.Services.AddDbContext<RestaurantDbContext>(option => option.UseSqlServer("Data Source=DESKTOP-QS28KQP\\SQLEXPRESS;Initial Catalog=RestaurantDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"));
+builder.Services.AddDbContext<RestaurantDbContext>(option => option.UseSqlServer("Data Source=DESKTOP-QS28KQP\\SQLEXPRESS;Initial Catalog=RestaurantDB;Integrated Security=True;Encrypt=True;Trust Server Certificate=True"));
 //Db Context For Server
-builder.Services.AddDbContext<RestaurantDbContext>(option => option.UseSqlServer("Data Source=DESKTOP-QS28KQP\\SQLEXPRESS;Initial Catalog=RestaurantDB;User Id=admin;Password=Test@1234;Trust Server Certificate=True"));
+//builder.Services.AddDbContext<RestaurantDbContext>(option => option.UseSqlServer("Data Source=DESKTOP-QS28KQP\\SQLEXPRESS;Initial Catalog=RestaurantDB;User Id=admin;Password=Test@1234;Trust Server Certificate=True"));
 
 builder.Services.AddScoped<IItems, ItemsService>();
 builder.Services.AddScoped<ICategory, CategoryService>();
@@ -66,26 +66,26 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // When You Want To Test Locally Comment This, If Publish Keep It
-app.UseSwagger();
-app.UseSwaggerUI(
-    c => {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "BrainstormingFoodTek API V1");
-        c.RoutePrefix = string.Empty;
-    }
-    );
+//app.UseSwagger();
+//app.UseSwaggerUI(
+//    c => {
+//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "BrainstormingFoodTek API V1");
+//        c.RoutePrefix = string.Empty;
+//    }
+//    );
 // Until Here To Test Locally
 
 // Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseDeveloperExceptionPage();
-//    app.UseSwagger();
-//    app.UseSwaggerUI(c =>
-//    {
-//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "BrainstormingFoodTek API V1");
-//    }  // Set Swagger endpoint
-//    );
-//}
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "BrainstormingFoodTek API V1");
+    }  // Set Swagger endpoint
+    );
+}
 
 app.UseHttpsRedirection();
 

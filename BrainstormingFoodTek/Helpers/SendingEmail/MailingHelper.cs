@@ -10,7 +10,7 @@ namespace BrainstormingFoodTek.Helpers.SendingEmail
 			try
 			{
                 //
-                var apiKey = "SendGrid:ApiKey";
+                var apiKey = "PUT_SECRET_KEY";
                 var client = new SendGridClient(apiKey);
                 var from = new EmailAddress("apptraines@gmail.com", "Brainstorming Foodtek");
                 var subject = title;

@@ -1,4 +1,5 @@
 ﻿using BrainstormingFoodTek.DTOs.Registration.Request;
+using BrainstormingFoodTek.Helpers.JWT;
 using BrainstormingFoodTek.Helpers.OTPUserSelection;
 using BrainstormingFoodTek.Helpers.ValidationFields;
 using BrainstormingFoodTek.Interfaces;
@@ -69,7 +70,7 @@ namespace BrainstormingFoodTek.Services
                     return $"No User Found";
 
                 }
-                if (!ValidationHelpers.IsValidEmail(input.Email) || !ValidationHelpers.IsValidEmail(input.Password))
+                if (!(ValidationHelpers.IsValidEmail(input.Email) || ValidationHelpers.IsValidEmail(input.Password)))
                 {
                     return $"Not Valid Email or Password";
                 }
@@ -85,25 +86,48 @@ namespace BrainstormingFoodTek.Services
             }
         }
 
-        public async Task<bool> ResetPassword(ResetPasswordRequestDTO input)
+        public async Task<string> SendOTPToResetPassword(string email)
+        {
+            try
+            {
+                var user = _foodtekDbContext.Users.Where(u => u.Email == email && u.IsLoggedIn==false).SingleOrDefault();
+                if (user == null) {
+                    return "Invalid Email";
+                }
+                user.Otp = null;
+                user.ExpireOtp = null;
+                Random random = new Random();
+                _foodtekDbContext.Update(await _otpBasedOnUserRole.OTPBasedOnUserType(email, "OTP FOR RESET PASSWORD", "FOR RESET PASSWORD", user));
+                _foodtekDbContext.SaveChanges();
+                return "Check your email OTP has been sent!";
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<string> ResetPassword(ResetPasswordRequestDTO input)
         {
             var user = _foodtekDbContext.Users.Where(u => u.Email == input.Email && u.Otp == input.OTP
              && u.IsLoggedIn == false && u.ExpireOtp > DateTime.Now).SingleOrDefault();
             if (user == null)
             {
-                return false;
+                return "Go To SendOTPToResetPassword OR Signup if you DON'T have account";
             }
-            if (input.Password != input.ConfirmPassword)
+            if (input.NewPassword != input.ConfirmPassword)
             {
-                return false;
+                return "Confirmation Of Password Failed !";
             }
             user.Otp = null;
             user.ExpireOtp = null;
+            user.Password = input.NewPassword;
 
             _foodtekDbContext.Update(user);
             _foodtekDbContext.SaveChanges();
 
-            return true;
+            return "Your Password Updated Successfully Please Login Again.";
         }
 
         public async Task<string> Verification(VerificationRequestDTO input)
@@ -133,8 +157,10 @@ namespace BrainstormingFoodTek.Services
 
                 _foodtekDbContext.Update(user);
                 _foodtekDbContext.SaveChanges();
-                string jwtToken = _tokenProvider.CreateToken(user);
-                return jwtToken;
+                //string jwtToken = _tokenProvider.CreateToken(user);
+                //return jwtToken;
+                var response = TokenHelper.GenerateJWTToken(user.UserId.ToString(), "Client");
+                return response;
             }
         }
     }

@@ -7,7 +7,8 @@ namespace BrainstormingFoodTek.Interfaces
     {
         Task<string> SignUp(RegistrationRequestDTO input);
         Task<string> SignIn(SignInRequestDTO input);
-        Task<bool> ResetPassword(ResetPasswordRequestDTO input);
+        Task<string> ResetPassword(ResetPasswordRequestDTO input);
+        Task<string> SendOTPToResetPassword(string email);
         Task<string> Verification(VerificationRequestDTO input);
     }
 }

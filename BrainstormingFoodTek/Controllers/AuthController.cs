@@ -55,13 +55,29 @@ namespace BrainstormingFoodTek.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpPost("SendOTP-To-ResetPassword")]
+        public async Task<IActionResult> SendOTPResetPassword(string email)
+        {
+            try
+            {
+                var result= await _authenticationService.SendOTPToResetPassword(email);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+        }
+
         [HttpPost("ResetPassword")]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequestDTO input)
         {
             try
             {
-                await _authenticationService.ResetPassword(input);
-                return Ok(200);
+                var result = await _authenticationService.ResetPassword(input);
+                return Ok(result);
             }
             catch (Exception ex)
             {
